@@ -129,7 +129,7 @@ def seg_person(seg_model, imgs):
         pred_t = [scores.index(x) for x in scores if x>0.4] # 取出分数足够高的目标的索引，分数是从低到高排列的。
         # 如果分数都不高，那么认为该图片中没有人物目标
         if len(pred_t) == 0:
-            seg_bg = torch.cat([seg_bg, img.unsqueeze(0)])
+            seg_bg = torch.cat([seg_bg, img.cpu().unsqueeze(0)])
             continue
         # 取出最后一个目标的索引
         pred_t = pred_t[-1]
@@ -139,14 +139,14 @@ def seg_person(seg_model, imgs):
         # 人物目标对应的mask的索引
         personmasks = torch.tensor(np.argwhere(labels == 1))
         if len(personmasks) == 0:
-            seg_bg = torch.cat([seg_bg, img.unsqueeze(0)])
+            seg_bg = torch.cat([seg_bg, img.cpu().unsqueeze(0)])
             continue
         object_ = torch.zeros((1, imgs.shape[2], imgs.shape[3]))
         for personmask in personmasks:           
             object_ += masks[personmask].squeeze(0)
             object_ = torch.clip(object_, 0, 1)#.unsqueeze(0)
-        object_1 = torch.where(object_ == 0, object_, img).unsqueeze(0)
-        background = torch.where(object_ == 0, img, object_).unsqueeze(0)
+        object_1 = torch.where(object_ == 0, object_, img.cpu()).unsqueeze(0)
+        background = torch.where(object_ == 0, img.cpu(), object_).unsqueeze(0)
         seg_person = torch.cat((seg_person, object_1))
         seg_bg = torch.cat((seg_bg, background))
         # 将每张图片分割后得到的目标存储下来
