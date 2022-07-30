@@ -200,7 +200,7 @@ def main(args):
             seg_fake_person, seg_fake_bg = seg_person(seg_model, fake_img)
             # 将分割结果送入判别器进行判断         
             # seg_fake_d = D(seg_fake_result)
-            seg_fake_person_d = 0
+            seg_fake_person_d = torch.tensor([0])
             if len(seg_fake_person) > 0:
                 seg_fake_person_d = D(seg_fake_person)
             seg_fake_bg_d = D(seg_fake_bg)
@@ -211,7 +211,7 @@ def main(args):
             seg_anime_person, seg_anime_bg = seg_person(seg_model, anime)
             # 将分割结果送入判别器进行判断
             # seg_anime_d = D(seg_anime_result)
-            seg_anime_person_d = 0
+            seg_anime_person_d = torch.tensor([0])
             if len(seg_anime_person) > 0:
                 seg_anime_person_d = D(seg_anime_person)
             seg_anime_bg_d = D(seg_anime_bg)
