@@ -15,7 +15,7 @@ from utils.common import load_checkpoint
 from utils.common import save_checkpoint
 from utils.common import set_lr
 from utils.common import initialize_weights
-from utils.common import segmentation, seg_person
+from utils.common import seg_person
 from utils.image_processing import denormalize_input
 from dataset import AnimeDataSet
 from tqdm import tqdm
