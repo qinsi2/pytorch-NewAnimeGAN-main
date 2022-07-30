@@ -5,7 +5,7 @@ import torch.nn as nn
 import urllib.request
 import cv2
 from tqdm import tqdm
-
+import numpy as np
 HTTP_PREFIXES = [
     'http',
     'data:image/jpeg',
