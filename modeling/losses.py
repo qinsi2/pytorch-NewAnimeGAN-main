@@ -60,12 +60,17 @@ class AnimeGanLoss:
             self.wcol * self.color_loss(img, fake_img),
         ]
 
-    def compute_loss_D(self, fake_img_d, real_anime_d, real_anime_gray_d, real_anime_smooth_gray_d):
+    def compute_loss_D(self, fake_img_d, real_anime_d, real_anime_gray_d, real_anime_smooth_gray_d, seg_fake_person_d,seg_fake_bg_d, seg_anime_person_d, seg_anime_bg_d):
         return self.wadvd * (
             self.adv_loss_d_real(real_anime_d) +
             self.adv_loss_d_fake(fake_img_d) +
             self.adv_loss_d_fake(real_anime_gray_d) +
-            0.2 * self.adv_loss_d_fake(real_anime_smooth_gray_d)
+            0.2 * self.adv_loss_d_fake(real_anime_smooth_gray_d) +
+            # 这两个损失项是分割结果的损失
+            self.adv_loss_d_fake(seg_fake_person_d) +
+            self.adv_loss_d_fake(seg_fake_bg_d) +
+            self.adv_loss_d_real(seg_anime_person_d) +
+            self.adv_loss_d_real(seg_anime_bg_d)
         )
 
 
