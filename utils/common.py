@@ -125,7 +125,7 @@ def seg_person(seg_model, imgs):
     # 将分割后的每个图片的不同目标提取出来
     for seg_img, img in zip(seg_imgs, imgs):
         # 取出各目标的得分
-        scores = list(seg_img['scores'].detach().numpy())
+        scores = list(seg_img['scores'].cpu().detach().numpy())
         pred_t = [scores.index(x) for x in scores if x>0.4] # 取出分数足够高的目标的索引，分数是从低到高排列的。
         # 如果分数都不高，那么认为该图片中没有人物目标
         if len(pred_t) == 0:
@@ -134,8 +134,8 @@ def seg_person(seg_model, imgs):
         # 取出最后一个目标的索引
         pred_t = pred_t[-1]
         # 取出目标的mask和label
-        masks = (seg_img['masks']>0.5).detach()[:pred_t+1]
-        labels = seg_img['labels'].detach().numpy()[:pred_t+1]
+        masks = (seg_img['masks']>0.5).cpu().detach()[:pred_t+1]
+        labels = seg_img['labels'].cpu().detach().numpy()[:pred_t+1]
         # 人物目标对应的mask的索引
         personmasks = torch.tensor(np.argwhere(labels == 1))
         if len(personmasks) == 0:
@@ -152,5 +152,5 @@ def seg_person(seg_model, imgs):
         # 将每张图片分割后得到的目标存储下来
         # seg_result = torch.cat((seg_result, objects))
     
-    return seg_person ,seg_bg
+    return seg_person.to(device) ,seg_bg.to(device)
 
